@@ -1,0 +1,39 @@
+{
+  "name": "javascript-coding-interview-questions",
+  "version": "1.0.0",
+  "description": "A comprehensive collection of JavaScript coding interview questions with detailed solutions and explanations",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "javascript",
+    "coding-interview",
+    "algorithms",
+    "data-structures",
+    "problem-solving",
+    "interview-prep",
+    "string-manipulation",
+    "mathematical-problems",
+    "fibonacci",
+    "factorial",
+    "palindrome",
+    "anagrams"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/javascript-coding-interview-questions.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/javascript-coding-interview-questions/issues"
+  },
+  "homepage": "https://github.com/yourusername/javascript-coding-interview-questions#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
