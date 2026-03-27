@@ -422,3 +422,190 @@ function factorialRecursive(n) {
   return n * factorialRecursive(n - 1);
 }
 ```
+
+## 18. Valid Parentheses (Balanced Brackets)
+**Problem**: Given a string `s` containing three types of brackets `()`, `{}`, `[]`, determine if the expression is balanced.  
+**Input**: "()" → **Output**: true  
+**Input**: "(()())" → **Output**: true  
+**Input**: "())())" → **Output**: false  
+**Input**: "{[()]}" → **Output**: true  
+**Input**: "{[(])}" → **Output**: false
+
+```javascript
+function isBalanced(s) {
+  const stack = [];
+  const pairs = {
+    ')': '(',
+    '}': '{',
+    ']': '['
+  };
+
+  for (let char of s) {
+    if (['(', '{', '['].includes(char)) {
+      stack.push(char); // push opening
+    } else if ([')', '}', ']'].includes(char)) {
+      if (stack.length === 0 || stack.pop() !== pairs[char]) {
+        return false; // mismatch
+      }
+    }
+  }
+
+  return stack.length === 0; // must be empty if balanced
+}
+```
+
+## 19. Two Sum II (Input array is sorted)
+**Problem**: Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number.  
+**Input**: numbers = [2,7,11,15], target = 9 → **Output**: [1,2]  
+**Input**: numbers = [2,3,4], target = 6 → **Output**: [1,3]  
+**Input**: numbers = [-1,0], target = -1 → **Output**: [1,2]
+
+```javascript
+var twoSum = function(numbers, target) {
+  let left = 0;
+  let right = numbers.length - 1;
+
+  while (left < right) {
+    const sum = numbers[left] + numbers[right];
+
+    if (sum === target) {
+      // return 1-based indices
+      return [left + 1, right + 1];
+    } else if (sum < target) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+};
+```
+
+## 20. Flatten a Deeply Nested Array
+**Problem**: You are given an array that may contain nested arrays of arbitrary depth. Flatten the array into a single-level array, preserving original order.  
+**Input**: `[1, 2, 3, 4, [5, 6, [7, 8]]]` → **Output**: `[1, 2, 3, 4, 5, 6, 7, 8]`
+
+**Technique 1 - Using forEach Elements Tracking:**
+```javascript
+const handleOnFlattenArray = () => {
+  const array = [1, 2, 3, 4, [5, 6, [7, 8]]];
+  let result = [];
+
+  array.forEach((elem) => {
+    if (Array.isArray(elem)) {
+      elem.forEach((elem1) => {
+        if (Array.isArray(elem1)) {
+          elem1.forEach((elem2) => {
+            result.push(elem2);
+          });
+        } else {
+          result.push(elem1);
+        }
+      });
+    } else {
+      result.push(elem);
+    }
+  });
+  return result;
+};
+```
+
+**Technique 2 - Using Recursion:**
+```javascript
+function flatten(arr, result = []) {
+  for (let i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i])) {
+      flatten(arr[i], result); // recursive call
+    } else {
+      result[result.length] = arr[i]; // push without using push()
+    }
+  }
+  return result;
+}
+```
+
+# JavaScript Concepts
+
+## 1. call, apply, and bind Methods
+These methods are used to set the `this` keyword to a specific object when invoking a function.
+
+**Call Method:** invokes the function with a given `this` value and arguments provided individually.
+```javascript
+let emp = {firstName: 'Zeeshan', lastName: "Noor"};
+
+function handleOnCallMethod(greeting1, greeting2) {
+    console.log(`${greeting1} ${this.firstName} ${this.lastName} ${greeting2}`);
+}
+
+handleOnCallMethod.call(emp, 'Hi', "How are you ??");
+```
+
+**Apply Method:** invokes the function with a given `this` value, but arguments are provided as an array.
+```javascript
+function handleOnApplyMethod(greeting1, greeting2) {
+    console.log(`${greeting1} ${this.firstName} ${this.lastName} ${greeting2}`);
+}
+
+handleOnApplyMethod.apply(emp, ['Hi', "How are you ??"]);
+```
+
+**Bind Method:** returns a new function with `this` bound to the specified object. It does not invoke the function immediately.
+```javascript
+function handleOnBindMethod(greeting1, greeting2) {
+    console.log(`${greeting1} ${this.firstName} ${this.lastName} ${greeting2}`);
+}
+
+var invokeBind = handleOnBindMethod.bind(emp);
+invokeBind('Hi', "How are you ??");
+invokeBind('Hello', "How are you doing Today??");
+```
+
+## 2. Slice Method
+The `slice()` method does not mutate (change) the original array; instead, it returns a new array containing the extracted elements.
+```javascript
+let arrayIntegers = [1, 2, 3, 4, 5];
+let result = arrayIntegers.slice(0, 3);
+// result: [1, 2, 3]
+// arrayIntegers: [1, 2, 3, 4, 5]
+```
+
+## 3. Splice Method
+The `splice()` method is used to add, remove, or replace elements within an array. It mutates the original array by removing, replacing, or adding elements.
+```javascript
+let arrayIntegersOriginal1 = [1, 2, 3, 4, 5];
+let result = arrayIntegersOriginal1.splice(1, 0, 10);
+// Inserts '10' at index 1 without removing any elements
+// arrayIntegersOriginal1: [1, 10, 2, 3, 4, 5]
+```
+
+## 4. IIFE (Immediately Invoked Function Expression)
+An IIFE is a JavaScript function that runs as soon as it is defined. It creates a private lexical scope.
+```javascript
+(function () {
+  var message = "IIFE";
+  console.log(message);
+})();
+// console.log(message); // ReferenceError: message is not defined
+```
+
+## 5. Memoization
+Memoization is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.
+```javascript
+const memoizeAddition = () => {
+  let cache = []; // Note: better practice to use an object {} if the keys aren't numeric
+  return (value) => {
+    if (value in cache) {
+      console.log("Fetching from cache", cache);
+      return cache[value];
+    } else {
+      console.log("Calculating result");
+      let result = value + 20;
+      cache[value] = result;
+      return result;
+    }
+  };
+};
+
+const addition = memoizeAddition();
+console.log(addition(20)); // Calculating result
+console.log(addition(20)); // Fetching from cache
+```

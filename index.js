@@ -26,6 +26,7 @@ const handleOnReverseString = (string) => {
 
 const checkOnPalindrome = (string) => {
   // First Technique
+  // let removeWhiteSpace = string.replace(/\W/g, '').toLowerCase(); // NEED TO TEST
   const reverseStr = (str) => [...str].reverse().join("");
   return reverseStr(string) == string;
 };
@@ -66,8 +67,8 @@ const handleOnDuplicateChar = (string) => {
 
 function firstNonRepeatingChar(str) {
   for (let i = 0; i < str.length; i++) {
-    // The lastIndexOf() method searches the string from the end to the beginning.
     // The indexOf() method searches the string from the beginning to the end.
+    // The lastIndexOf() method searches the string from the end to the beginning.
     // return index value of element 0,1,2 etc
     // console.log(str.indexOf(str[i]),"===",str.lastIndexOf(str[i]));
 
@@ -80,6 +81,32 @@ function firstNonRepeatingChar(str) {
 
 // console.log(firstNonRepeatingChar("aabbcdd"));
 // console.log(firstNonRepeatingChar("aabbcc"));
+
+// function firstNonRepeatingChar(str) {
+  // Step 1: Count frequency of each character
+//   let freq = {};
+//   for (let i = 0; i < str.length; i++) {
+//     let ch = str[i];
+//     if (freq[ch] === undefined) {
+//       freq[ch] = 1;
+//     } else {
+//       freq[ch]++;
+//     }
+//   }
+
+  // Step 2: Find first character with frequency 1
+//   for (let i = 0; i < str.length; i++) {
+//     if (freq[str[i]] === 1) {
+//       return str[i];
+//     }
+//   }
+
+//   return null; // if no non-repeating character
+// }
+
+// Example
+// console.log(firstNonRepeatingChar("aabbcdd")); // c
+// console.log(firstNonRepeatingChar("aabb"));    // null
 
 // ********************************
 
@@ -408,3 +435,214 @@ function factorialRecursive(n) {
 // console.log("Recursive (5!):", factorialRecursive(5));   // Output: 120
 // console.log("Recursive (10!):", factorialRecursive(10)); // Output: 3628800
 // console.log("Recursive (-3!):", factorialRecursive(-3)); // Output: Factorial is not defined for negative numbers.
+
+
+//*******************************************/
+
+//Given a string s containing three types of brackets () Determine whether the Expression are balanced or not. output: ())())
+
+function isBalanced(s) {
+  const stack = [];
+  const pairs = {
+    ')': '(',
+    '}': '{',
+    ']': '['
+  };
+
+  for (let char of s) {
+    if (['(', '{', '['].includes(char)) {
+      stack.push(char); // push opening
+    } else if ([')', '}', ']'].includes(char)) {
+      console.log("I'm here ==>",pairs[char]);
+      
+      if (stack.length === 0 || stack.pop() !== pairs[char]) {
+        return false; // mismatch
+      }
+    }
+  }
+
+  return stack.length === 0; // must be empty if balanced
+}
+
+// Example usage:
+// console.log(isBalanced("()"));        // true
+// console.log(isBalanced("(()())"));    // true
+// console.log(isBalanced("())())"));    // false
+console.log(isBalanced("{[()]}"));    // true
+console.log(isBalanced("{[(])}"));    // false
+
+
+// LeetCode 167 – Two Sum II (Input array is sorted)
+// //**Example 1:
+
+// Input: numbers = [2,7,11,15], target = 9
+// Output: [1,2]
+// Explanation: The sum of 2 and 7 is 9. Therefore, index1 = 1, index2 = 2. We return [1, 2].
+// Example 2:
+
+// Input: numbers = [2,3,4], target = 6
+// Output: [1,3]
+// Explanation: The sum of 2 and 4 is 6. Therefore index1 = 1, index2 = 3. We return [1, 3].
+// Example 3:
+
+// Input: numbers = [-1,0], target = -1
+// Output: [1,2]
+// Explanation: The sum of -1 and 0 is -1. Therefore index1 = 1, index2 = 2. We return [1, 2]. */
+
+var twoSum = function(numbers, target) {
+  let left = 0;
+  let right = numbers.length - 1;
+
+  while (left < right) {
+    const sum = numbers[left] + numbers[right];
+
+    if (sum === target) {
+      // return 1-based indices
+      return [left + 1, right + 1];
+    } else if (sum < target) {
+      left++;
+    } else {
+      right--;
+    }
+  }
+};
+
+// console.log(twoSum([2,7,11,15],9));
+// console.log(twoSum([2,3,4],6));
+// console.log(twoSum([-1,0],-1));
+// console.log(twoSum([2,7,11,15],9));
+
+
+
+
+//Flatten a Deeply Nested Array
+// You are given an array that may contain nested arrays of arbitrary depth.
+// Your task is to flatten the array into a single-level array, preserving the original order of elements.
+// INPUT  --> [1, 2, 3, 4, [5, 6, [7, 8]]]
+// OUTPUT --> [1, 2, 3, 4, 5, 6, 7, 8]
+
+const handleOnFlattenArray = ()=>{
+    const array = [1,2,3,4,[5,6,[7,8]]];
+let result = [];
+
+array.forEach((elem) => {
+  if (Array.isArray(elem)) {
+    elem.forEach((elem1) => {
+      if (Array.isArray(elem1)) {
+        elem1.forEach((elem2) => {
+          result.push(elem2);
+        });
+      } else {
+        result.push(elem1);
+      }
+    });
+  } else {
+    result.push(elem);
+  }
+});
+return result
+}
+
+// console.log(handleOnFlattenArray()); // [1,2,3,4,5,6,7,8]
+
+// Second Recursive Solution
+const array = [1, 2, 3, 4, [5, 6, [7, 8]]];
+
+function flatten(arr, result = []) {
+  for (let i = 0; i < arr.length; i++) {
+    if (Array.isArray(arr[i])) {
+      flatten(arr[i], result); // recursive call
+    } else {
+      result[result.length] = arr[i]; // push without using push()
+    }
+  }
+  return result;
+}
+
+const output = flatten(array);
+// console.log(output); // [1,2,3,4,5,6,7,8]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//******************** call, apply, and bind *********************************/
+// let emp = {firstName:'Zeeshan', lastName:"Noor"}
+
+// function handleOnCallMethod(greeting1,greeting2) {
+//     console.log(`${greeting1} ${this.firstName} ${this.lastName} ${greeting2}`);
+// }
+
+// handleOnCallMethod.call(emp,'Hi',"How are you ??")
+
+// let emp = {firstName:'Zeeshan', lastName:"Noor"}
+
+// function handleOnApplyMethod(greeting1,greeting2) {
+//     console.log(`${greeting1} ${this.firstName} ${this.lastName} ${greeting2}`);
+// }
+
+// handleOnApplyMethod.apply(emp,['Hi',"How are you ??"])
+
+// let emp = {firstName:'Zeeshan', lastName:"Noor"}
+
+// function handleOnBindMethod(greeting1,greeting2) {
+//     console.log(`${greeting1} ${this.firstName} ${this.lastName} ${greeting2}`);
+// }
+
+// var invokeBind = handleOnBindMethod.bind(emp)
+// invokeBind('Hi',"How are you ??")
+// invokeBind('Hello',"How are you doing Today??")
+
+//*****************************************************/
+
+// Slice Method --> The slice() method does not mutate (change) the original array; instead, it returns a new array containing the extracted elements.
+// let arrayIntegers = [1, 2, 3, 4, 5];
+// let result = arrayIntegers.slice(0,3)
+// console.log({result});
+// console.log(arrayIntegers);
+
+// Splice Method --> The splice() method in JavaScript is used to add, remove, or replace elements within an array
+// let arrayIntegersOriginal1 = [1, 2, 3, 4, 5];
+// let result = arrayIntegersOriginal1.splice(1,0,10)
+// // let result = arrayIntegersOriginal1.splice(1,1)
+// // let result = arrayIntegersOriginal1.splice(1,0,10,20)
+// // console.log(result);
+// console.log(arrayIntegersOriginal1);
+
+// IIFE (Immediately Invoked Function Expression)
+
+// (function () {
+//   var message = "IIFE";
+//   console.log(message);
+// })();
+// console.log(message); //Error: message is not defined
+
+// Memoization
+// const memoizeAddition = () => {
+//   let cache = [];
+//   return (value) => {
+//     if (value in cache) {
+//       console.log("Fetching from cache",cache);
+
+//       return cache[value];
+//     } else {
+//       console.log("Calculating result");
+//       let result = value + 20;
+//       cache[value] = result;
+//       return result;
+//     }
+//   };
+// };
+
+// const addition = memoizeAddition();
+// console.log(addition(20)); //output: 40 calculated
+// console.log(addition(20)); //output: 40 cached
